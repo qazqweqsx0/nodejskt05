@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>kt05 · Realtime чат</title>
+  <link rel="stylesheet" href="/chat.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">kt05 <span>realtime chat</span></div>
+    <div class="who">
+      <span id="current-user" class="muted" hidden></span>
+      <button id="logout-btn" class="ghost" type="button" hidden>Выйти</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="auth-panel" class="auth panel">
+      <h1>Вход в чат</h1>
+      <p class="muted">
+        Тот же аккаунт, что и в REST API: access-токен выдаёт <code>POST /auth/login</code>.
+      </p>
+
+      <form id="auth-form">
+        <label>
+          Email
+          <input id="email" type="email" autocomplete="email" required />
+        </label>
+
+        <label id="name-field" hidden>
+          Имя
+          <input id="name" type="text" minlength="1" maxlength="120" autocomplete="name" />
+        </label>
+
+        <label>
+          Пароль
+          <input id="password" type="password" minlength="8" maxlength="72" autocomplete="current-password" required />
+        </label>
+
+        <div class="row">
+          <button type="submit">Войти</button>
+          <button id="register-btn" class="secondary" type="button">Регистрация</button>
+        </div>
+      </form>
+
+      <p id="auth-error" class="error" hidden></p>
+    </section>
+
+    <section id="chat-panel" class="layout" hidden>
+      <aside class="panel">
+        <h2>Онлайн <span id="online-count" class="badge">0</span></h2>
+        <ul id="online-list" class="list"></ul>
+        <p class="hint">События <code>user:online</code> и <code>user:offline</code>.</p>
+      </aside>
+
+      <section class="panel chat">
+        <header class="chat-header">
+          <div>
+            <h2 id="chat-title">Общий чат</h2>
+            <span id="chat-subtitle" class="muted">сообщения видят все подключённые</span>
+          </div>
+        </header>
+
+        <p id="status" class="status" hidden></p>
+
+        <ul id="messages" class="messages"></ul>
+
+        <form id="message-form" class="composer">
+          <input
+            id="message-input"
+            type="text"
+            maxlength="1000"
+            placeholder="Написать сообщение…"
+            autocomplete="off"
+            required
+          />
+          <button type="submit">Отправить</button>
+        </form>
+      </section>
+
+      <aside class="panel">
+        <h2>Комнаты</h2>
+
+        <form id="room-form" class="row">
+          <input id="room-input" type="text" maxlength="32" placeholder="имя комнаты" required />
+          <button type="submit">Войти</button>
+        </form>
+
+        <ul id="room-list" class="list"></ul>
+        <p class="hint">События <code>room:join</code>, <code>room:leave</code>, <code>room:message</code>.</p>
+      </aside>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/chat.js"></script>
+</body>
+</html>
